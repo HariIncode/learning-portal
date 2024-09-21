@@ -17,37 +17,43 @@ function Header() {
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" aria-label="Toggle navigation" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto my-2 my-lg-0 d-flex"
-              style={{ maxHeight: '100px', alignItems: 'center' }}
+            {/* Apply justify-content-between to space gp1 and gp2 evenly */}
+            <Nav className="w-100 d-flex justify-content-between align-items-center"
               navbarScroll>
+              
+              {/* First group of links */}
+              <div className='d-flex'>
+                <LinkContainer to='/enroll'>
+                  <Nav.Link>Enroll</Nav.Link>
+                </LinkContainer>
 
-              <LinkContainer to='/enroll'>
-                <Nav.Link>Enroll</Nav.Link>
-              </LinkContainer>
+                <LinkContainer to='/learning'>
+                  <Nav.Link>My Learning</Nav.Link>
+                </LinkContainer>
 
-              <LinkContainer to='/learning'>
-                <Nav.Link>My Learning</Nav.Link>
-              </LinkContainer>
+                <LinkContainer to='/profile'>
+                  <Nav.Link>Profile</Nav.Link>
+                </LinkContainer>
 
-              <LinkContainer to='/profile'>
-                <Nav.Link>Profile</Nav.Link>
-              </LinkContainer>
+                <LinkContainer to='/contact'>
+                  <Nav.Link>Contact</Nav.Link>
+                </LinkContainer>
+              </div>
 
-              <LinkContainer to='/contact'>
-                <Nav.Link>Contact</Nav.Link>
-              </LinkContainer>
+              {/* Second group of buttons */}
+              <div className='d-flex'>
+                <LinkContainer to='/signup'>
+                  <Nav.Link>
+                    <Button variant='success' className="btn-block">Signup</Button>
+                  </Nav.Link>
+                </LinkContainer>
 
-              <LinkContainer to='/signup'>
-                <Nav.Link>
-                  <Button variant='success' className="btn-block">Signup</Button>
-                </Nav.Link>
-              </LinkContainer>
-
-              <LinkContainer to="/login">
-                <Nav.Link>
-                  <Button variant='success' className="btn-block">Login</Button>
-                </Nav.Link>
-              </LinkContainer>
+                <LinkContainer to="/login">
+                  <Nav.Link>
+                    <Button variant='success' className="btn-block">Login</Button>
+                  </Nav.Link>
+                </LinkContainer>
+              </div>
 
             </Nav>
           </Navbar.Collapse>
