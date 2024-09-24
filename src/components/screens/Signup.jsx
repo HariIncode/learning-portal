@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 import FormContainer from "../FormContainer";
 import Message from "../Message";
 
 function Signup() {
+  let navigate = useNavigate();
+
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
   const [email, setEmail] = useState("");
@@ -14,26 +17,55 @@ function Signup() {
   const [message, setMessage] = useState("");
   const [variant, setVariant] = useState("danger");
 
-  const submitHandler = (e) => {
+  const submitHandler = async(e) => {
     e.preventDefault();
-    setMessage(`${fname}, ${lname}, ${email}, ${pwd}, ${cPwd}, ${mobile}`);
+    // setMessage(`${fname}, ${lname}, ${email}, ${pwd}, ${cPwd}, ${mobile}`);
 
-    if (pwd != cPwd) {
-      setMessage("password error");
+    if (pwd !== cPwd) {
+      setMessage("password not matching...");
       setVariant("danger");
-    } else if (mobile.length != 10) {
-      setMessage("Mobile num error");
+    } else if (mobile.length !== 10) {
+      setMessage("please enter a valid mobile number");
       setVariant("danger");
+    }else if(pwd.length !== 6){
+      setMessage("Password length should be atleast 6");
     } else {
-      setMessage("Success");
-      setVariant("success");
-      setFname("");
-      setLname("");
-      setEmail("");
-      setPwd("");
-      setCpwd("");
-      setMobile("");
-    }
+      // setMessage("Success");
+      // setVariant("success");
+      // setFname("");
+      // setLname("");
+      // setEmail("");
+      // setPwd("");
+      // setCpwd("");
+      // setMobile("");
+      try{
+        const response = await fetch("http://localhost:5000/api/auth/createUser",
+          {method:"POST",
+            headers:{
+              "Content-Type": "application-json"
+            },
+            body:JSON.stringify({
+              name:fname+lname,
+              email:email,
+              password:pwd,
+              mobile:mobile
+            })
+          }
+        );
+        const json = await response.json();
+        if (!json.success){
+          setMessage(json.error);
+        }else{
+          localStorage.setItem("token", json.authToken);
+          localStorage.setItem("name", json.name);
+          localStorage.setItem("success", json.success);
+          setMessage("User created successfully");
+          navigate("/login")
+        }
+      } catch(error){
+        setMessage("Something Went Wrong!");
+      }
+    } 
   };
 
   return (
