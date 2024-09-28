@@ -1,21 +1,54 @@
 import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 import FormContainer from "../FormContainer";
 import Message from "../Message";
 
 function Login() {
+  let navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [message, setMessage] = useState("");
   const [variant, setVariant] = useState("danger");
 
-  const submitHandler = (e) => {
+  const submitHandler = async(e) => {
     e.preventDefault();
-    setMessage(`${email}, ${pwd}`);
-    setVariant("success");
-    setEmail("");
-    setPwd("");
+
+    try{
+      // fetch the api and pass the values to it
+      const response = await fetch("http://localhost:5000/api/auth/loginUser", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({email: email, password: pwd})
+      });
+      // wait for the respose and validate it
+
+      const json = await response.json();
+
+      if(json.success){
+        localStorage.setItem('token', json.authToken);
+        localStorage.setItem('name', json.name);
+        localStorage.setItem('success', json.success);
+        setMessage("Login Success");
+        setVariant("success");
+        navigate("/");
+      } else{
+        console.log(json)
+        setMessage(json.error);
+        console.log(json.error);
+        setVariant("danger");
+      }
+    } catch(error){
+        setMessage(message);
+    }
+    // setMessage(`${email}, ${pwd}`);
+    // setVariant("success");
+    // setEmail("");
+    // setPwd("");
   };
 
   return (

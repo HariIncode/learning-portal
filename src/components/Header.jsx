@@ -3,8 +3,16 @@ import { Container, Button } from 'react-bootstrap';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { LinkContainer } from 'react-router-bootstrap';
+import { useNavigate } from 'react-router-dom'
 
 function Header() {
+  let navigate = useNavigate();
+  const logout =()=>{
+    localStorage.removeItem('token');
+    localStorage.removeItem('success');
+    localStorage.removeItem('name');
+    navigate('/login');
+  }
   return (
     <>
       <Navbar bg='dark' variant='dark' collapseOnSelect expand="lg">
@@ -40,20 +48,28 @@ function Header() {
                 </LinkContainer>
               </div>
 
-              {/* Second group of buttons */}
-              <div className='d-flex'>
-                <LinkContainer to='/signup'>
-                  <Nav.Link>
-                    <Button variant='success' className="btn-block">Signup</Button>
-                  </Nav.Link>
-                </LinkContainer>
+              { localStorage.getItem('token') && <Nav.Link>Welcome {`${localStorage.getItem('name')}`}</Nav.Link>}
 
-                <LinkContainer to="/login">
+              {/* Second group of buttons */}
+              {!localStorage.getItem('token')?
+                    <div className='d-flex'>
+                    <LinkContainer to='/signup'>
+                      <Nav.Link>
+                        <Button variant='success' className="btn-block">Signup</Button>
+                      </Nav.Link>
+                    </LinkContainer>
+    
+                    <LinkContainer to="/login">
+                      <Nav.Link>
+                        <Button variant='success' className="btn-block">Login</Button>
+                      </Nav.Link>
+                    </LinkContainer>
+                  </div> :
                   <Nav.Link>
-                    <Button variant='success' className="btn-block">Login</Button>
-                  </Nav.Link>
-                </LinkContainer>
-              </div>
+                  <Button variant='danger' className="btn-block" onClick={logout}>Logout</Button>
+                </Nav.Link>
+            }
+              
 
             </Nav>
           </Navbar.Collapse>
