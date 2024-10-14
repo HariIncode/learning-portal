@@ -1,15 +1,37 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Container, Row, Button, ListGroup, Image, Col, ListGroupItem, Card } from 'react-bootstrap';
-import { Link,useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Rating from './Rating';
-import Courses from '../Courses';
+import coursesContext from "./context/coursesContext";
+import { useNavigate } from 'react-router-dom';
 
 function Course() {
-  const { id } = useParams();
-  const course = Courses.find((c) => c.id === Number(id));
-  console.log(course.image)
+  let navigate = useNavigate();
+  const context = useContext(coursesContext);
+  const { getCourses, courses } = context;
+
+  useEffect(() => {
+    const checkTokenAndFetchCourses = async () => {
+      if (localStorage.getItem("token")) {
+        await getCourses();
+      } else {
+        navigate("/login");
+      }
+    };
+
+    checkTokenAndFetchCourses();
+  }, []);
+
+  const { id } = useParams(); // Ensure that you're getting the correct id from params
+  console.log(id);
+  
+  const course = courses.find((c) => c._id === id); // Use _id for comparison
+
+  if (!course) {
+    return <h2>Course not found</h2>; // Handle course not found scenario
+  }
+
   return (
-    <>
     <Container>
       <Link to='/' className='btn btn-dark my-3'>
         Go Back
@@ -21,9 +43,9 @@ function Course() {
         <Col md={5}>
           <ListGroup variant='flush'>
             <ListGroupItem><h3>{course.name}</h3></ListGroupItem>
-            <ListGroupItem><Rating value={course.rating} text={`${course.numReviews} reviews`} color={"#f8e825"}/></ListGroupItem>
+            <ListGroupItem><Rating value={course.rating} text={`${course.numReviews} reviews`} color={"#f8e825"} /></ListGroupItem>
             <ListGroupItem>
-              <h3>Price: {course.price} </h3>
+              <h3>Price: {course.price}</h3>
             </ListGroupItem>
             <ListGroupItem as='p'>
               {course.description}
@@ -51,57 +73,7 @@ function Course() {
         </Col>
       </Row>
     </Container>
-    </>
-  )
+  );
 }
 
-export default Course
-
-// import React from 'react';
-// import { Card, Row, Button, ListGroup, Image, Col } from 'react-bootstrap';
-// import { Link, useParams } from 'react-router-dom';
-// import Rating from './Rating';
-// import Courses from '../Courses';
-
-// function Course() {
-//   const { id } = useParams(); // Destructure id from useParams
-//   const course = Courses.find((c) => c.id === Number(id)); // Convert id to a number for comparison
-
-//   // Log to debug
-//   console.log('Course ID:', id);
-//   console.log('Course found:', course);
-
-//   if (!course) {
-//     return <h2>Course not found</h2>; // Render message if course is not found
-//   }
-
-//   return (
-//     <>
-//       <Link to='/' className='btn btn-dark my-3'>
-//         Go Back
-//       </Link>
-//       <Row>
-//         <Col md={6}>
-//           <Image src={course.image} alt={course.name} fluid />
-//         </Col>
-//         <Col md={6}>
-//           <ListGroup variant="flush">
-//             <ListGroupItem>
-//               <h3>{course.name}</h3>
-//             </ListGroupItem>
-//             <ListGroupItem>
-//               <Rating value={course.rating} text={`${course.numReviews} reviews`} />
-//             </ListGroupItem>
-//             <ListGroupItem>Price: ${course.price}</ListGroupItem>
-//             <ListGroupItem>Description: {course.description}</ListGroupItem>
-//           </ListGroup>
-//           <Button className='btn-block' type='button' disabled={course.enrolledStudents === 0}>
-//             {course.enrolledStudents > 0 ? 'Enroll Now' : 'Out of Stock'}
-//           </Button>
-//         </Col>
-//       </Row>
-//     </>
-//   );
-// }
-
-// export default Course;
+export default Course;

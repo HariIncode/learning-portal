@@ -7,11 +7,11 @@ function HomeScreen({ course }) {
   return (
     <>
       <Card className="my-3 p-3 rounded">
-        <Link to={`/course/${course.id}`}>
+        <Link to={`/course/${course._id}`}>
           <Card.Img src={course.image}></Card.Img>
         </Link>
         <Card.Body>
-          <Link to={`/course/${course.id}`} style={{ textDecoration: "none" }}>
+          <Link to={`/course/${course._id}`} style={{ textDecoration: "none" }}>
             <Card.Title as="h5">
               <b>{course.name}</b>
             </Card.Title>
