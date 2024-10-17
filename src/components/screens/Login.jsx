@@ -33,6 +33,7 @@ function Login() {
         localStorage.setItem('token', json.authToken);
         localStorage.setItem('name', json.name);
         localStorage.setItem('success', json.success);
+        localStorage.setItem('isAdmin', json.isAdmin);
         setMessage("Login Success");
         setVariant("success");
         navigate("/");

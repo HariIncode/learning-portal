@@ -1,6 +1,5 @@
 import React,{ useContext, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
-// import Courses from "../Courses";
 import HomeScreen from "./screens/HomeScreen";
 import coursesContext from "./context/coursesContext";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +8,7 @@ function Home() {
   let navigate = useNavigate();
   const context = useContext(coursesContext);
   const { getCourses, courses } = context;
+
   useEffect(() => {
     if(localStorage.getItem("token")){
       getCourses();
@@ -16,12 +16,7 @@ function Home() {
       navigate("/login");
     }
   },[]);
-  console.log("Courses-->",courses);
-  // console.log(courses.image);
-  console.log("First Course Image:", courses[0]?._id); // Safely access the first course's image
-
   
-
   return (
     <>
       <h1 className="text-center m-3">Welcome to Courses</h1>

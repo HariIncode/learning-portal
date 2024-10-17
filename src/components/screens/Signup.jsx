@@ -52,6 +52,7 @@ function Signup() {
           localStorage.setItem("token", json.authToken);
           localStorage.setItem("name", json.name);
           localStorage.setItem("success", json.success);
+          localStorage.setItem("isAdmin", json.isAdmin);
           setMessage("User created successfully.");
           setVariant("success");
           navigate("/login");

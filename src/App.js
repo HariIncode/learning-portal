@@ -7,6 +7,7 @@ import Home from "./components/Home";
 import Footer from "./components/Footer";
 import Signin from "./components/screens/Signup";
 import Login from "./components/screens/Login";
+import AdminScreen from "./components/screens/AdminScreen";
 import Course from "./components/Course";
 import CoursesState from "./components/context/coursesStates";
 
@@ -22,6 +23,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<Signin />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/admin" element={<AdminScreen />} />
                 <Route path="/course/:id" element={<Course />} />
               </Routes>
             </Container>

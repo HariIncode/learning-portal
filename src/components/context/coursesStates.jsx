@@ -16,7 +16,6 @@ const CoursesState = (props) => {
         },
       });
       const data = await response.json();
-      console.log("Fetched Courses:", data); // Log fetched data
       setCourses(data); // Assuming setCourses updates the state
     } catch (error) {
       console.error("Error fetching courses:", error);
@@ -26,8 +25,66 @@ const CoursesState = (props) => {
   useEffect(() => {
     getCourses();
   }, []);
+
+  // to add the courses
+    // get courses from form
+    const addCourses = async (
+      cname,
+      desc,
+      image,
+      category,
+      duration,
+      price,
+      language,
+      rating,
+      reviews,
+      enrolledStudents
+    ) => {
+      try {
+        const response = await fetch(`${host}/api/add/courses`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+          body:JSON.stringify({
+            name: cname,
+            description: desc,
+            image: image,
+            category: category,
+            language: language,
+            duration: duration,
+            price: price,
+            rating: rating,
+            numReviews: reviews,
+            enrolledStudents: enrolledStudents})
+        });
+        const course = await response.json();
+        setCourses(courses.concat(course))
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    const deleteCourse = async (id) => {
+      try {
+        const response = await fetch(`${host}/api/add/deleteCourse/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        });
+        const data = await response.json();
+        console.log(data);
+        
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
   return (
-    <coursesContext.Provider value={{ getCourses, courses }}>
+    <coursesContext.Provider value={{ getCourses, addCourses, deleteCourse, courses }}>
       {props.children}
     </coursesContext.Provider>
   );
